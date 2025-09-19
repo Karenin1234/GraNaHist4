@@ -1,0 +1,2 @@
+#szkola
+print("test")
