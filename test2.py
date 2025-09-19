@@ -1,1 +1,2 @@
 #Witaj!
+print("Witaj Świecie")
