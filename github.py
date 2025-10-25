@@ -1,2 +1,0 @@
-#szkola
-print("test")
