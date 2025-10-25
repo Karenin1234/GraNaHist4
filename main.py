@@ -32,7 +32,7 @@ def levelOne():
 def main():
     run = True
     clock=0
-    background = pygame.image.load('tloTest.png')
+    background = pygame.image.load('assets/tloTest.png')
     while run:
         clock+= pygame.time.Clock().tick(60)/1000
         for event in pygame.event.get():
