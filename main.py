@@ -1,7 +1,13 @@
+from enum import Enum
+
 import pygame
+from autorzy import autorzy_okno
+from pomocnicze import Sceny
+
 pygame.init()
 window = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Gra na historie")
+
 def levelOne():
     run = True
 
@@ -31,6 +37,7 @@ def levelOne():
     pygame.display.update()
 
 def main():
+    aktualna_scena = Sceny.menu
     run = True
     clock=0
 
@@ -45,45 +52,45 @@ def main():
 
     przycisk_start_rect = przycisk_start.get_rect(topleft=(320, 250))
     przycisk_autorzy_rect = przycisk_autorzy.get_rect(topleft=(320, 350))
-
+    window.blit(background, (0, 0))
     while run:
+
         pozycja_myszki = pygame.mouse.get_pos()
+        if aktualna_scena == Sceny.menu:
+            # animacja przycisku
+            if przycisk_start_rect.collidepoint(pozycja_myszki):
+                przycisk_start_hover = przycisk_start.copy()
+                przycisk_start_hover.fill((50, 50, 50, 50), special_flags=pygame.BLEND_RGBA_ADD)
+                window.blit(przycisk_start_hover, przycisk_start_rect)
+            else:
+                window.blit(przycisk_start, przycisk_start_rect)
 
+            # animacja
+            if przycisk_autorzy_rect.collidepoint(pozycja_myszki):
+                przycisk_autorzy_hover = przycisk_autorzy.copy()
+                przycisk_autorzy_hover.fill((50, 50, 50, 50), special_flags=pygame.BLEND_RGBA_ADD)
+                window.blit(przycisk_autorzy_hover, przycisk_autorzy_rect)
+            else:
+                window.blit(przycisk_autorzy, przycisk_autorzy_rect)
 
-        window.blit(background, (0, 0))
+            for event in pygame.event.get():
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if przycisk_start_rect.collidepoint(pozycja_myszki):
+                        print("Kliknięto START")
 
-        if przycisk_start_rect.collidepoint(pozycja_myszki):
-            przycisk_start_hover = przycisk_start.copy()
-            przycisk_start_hover.fill((50, 50, 50, 50), special_flags=pygame.BLEND_RGBA_ADD)
-            window.blit(przycisk_start_hover, przycisk_start_rect)
-        else:
-            window.blit(przycisk_start, przycisk_start_rect)
+                    if przycisk_autorzy_rect.collidepoint(pozycja_myszki):
+                        print("Kliknięto AUTORZY")
+                        aktualna_scena = Sceny.autorzy
+                        autorzy_okno(window)
 
-
-        if przycisk_autorzy_rect.collidepoint(pozycja_myszki):
-            przycisk_autorzy_hover = przycisk_autorzy.copy()
-            przycisk_autorzy_hover.fill((50, 50, 50, 50), special_flags=pygame.BLEND_RGBA_ADD)
-            window.blit(przycisk_autorzy_hover, przycisk_autorzy_rect)
-        else:
-            window.blit(przycisk_autorzy, przycisk_autorzy_rect)
-
-
+        elif aktualna_scena == Sceny.autorzy:
+            autorzy_okno(window).draw()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if przycisk_start_rect.collidepoint(pozycja_myszki):
-                    print("Kliknięto START")
-
-
-                if przycisk_autorzy_rect.collidepoint(pozycja_myszki):
-                    print("Kliknięto AUTORZY")
-
-
-
         pygame.display.update()
+
 
 if __name__=="__main__":
     main()
